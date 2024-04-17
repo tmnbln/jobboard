@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import jobOfferRoutes from './routes/jobOfferRoutes';
+
 const app = express();
 
 app.use(cors());
@@ -15,7 +16,7 @@ mongoose.connect('mongodb://localhost:27017/jobOffers').then(() => {
 
 app.use('/api', jobOfferRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ?? 3000;
 app.listen(port, () => {
     console.log(`🏃‍♂️ Server running on port ${port}.`);
 });
