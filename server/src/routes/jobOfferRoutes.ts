@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const {
     getJobOffers,
     createJobOffer,
@@ -11,4 +11,4 @@ const router = express.Router();
 router.route('/job-offers').get(getJobOffers).post(createJobOffer);
 router.route('/job-offers/:id').patch(updateJobOffer).delete(deleteJobOffer);
 
-module.exports = router;
+export default router;
