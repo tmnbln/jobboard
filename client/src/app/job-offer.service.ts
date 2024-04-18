@@ -25,9 +25,12 @@ export class JobOfferService {
     return this.http.post<JobOffer>(this.apiUrl, jobOffer);
   }
 
-  updateJobOffer(jobOffer: JobOffer): Observable<JobOffer> {
-    const url = `${this.apiUrl}/${jobOffer._id}`;
-    return this.http.put<JobOffer>(url, jobOffer);
+  updateJobOffer(jobOffer: JobOffer): void {
+    this.http.patch(`${this.apiUrl}/${jobOffer._id}`, jobOffer)
+      .subscribe({
+        next: response => console.log('Update successful', response),
+        error: error => console.error('Error updating job offer', error)
+      });
   }
 
   deleteJobOffer(id: string): Observable<JobOffer> {

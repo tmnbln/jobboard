@@ -10,7 +10,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
     AppComponent,
-    JobBoardComponent
+    JobBoardComponent,
   ],
   imports: [
     BrowserModule,

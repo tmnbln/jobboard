@@ -38,8 +38,14 @@ export class JobBoardComponent implements OnInit {
         event.previousIndex,
         event.currentIndex,
       );
+      const jobOffer = event.container.data[event.currentIndex];
+      const newStatus = this.board.columns.find(column => column.jobOffer === event.container.data)?.name;
+
+      if (jobOffer && newStatus) {
+          jobOffer.status = newStatus;
+
+          this.jobOfferService.updateJobOffer(jobOffer);
     }
   }
 }
-
-
+}
