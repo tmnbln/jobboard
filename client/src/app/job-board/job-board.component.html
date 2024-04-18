@@ -4,17 +4,16 @@
             <div class="column-title">
                 <h3>{{ column.name }}</h3>
             </div>
-            <div class="jobs-container" cdkDropList [cdkDropListData]="column.offers"
+            <div class="jobs-container" cdkDropList [cdkDropListData]="column.jobOffer"
                 (cdkDropListDropped)="drop($event)">
-                <div class="job-card" *ngFor="let jobOffer of column.offers" cdkDrag>
-                    {{ jobOffer }}
+                <div class="job-card" *ngFor="let offer of column.jobOffer" cdkDrag>
+                    {{ offer.title }} <br />
+                    {{ offer.company }}
                     <div class="job-actions">
                         <button>View</button>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>

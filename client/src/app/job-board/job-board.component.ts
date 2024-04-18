@@ -1,3 +1,4 @@
+import { JobOffer } from './../models/job-offer.model';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { Board } from '../models/board.model';
@@ -20,12 +21,14 @@ export class JobBoardComponent implements OnInit {
   ]);
 
   ngOnInit(): void {
-this.jobOfferService.getJobOffers().subscribe(jobOffers => {
-this.board.columns[0].offers = jobOffers.map(jobOffer => `${jobOffer.title} ${jobOffer.company}`);
-});
-  }
+    this.jobOfferService.getJobOffers().subscribe(jobOffers => {
+      this.board.columns.forEach(column => {
+        column.jobOffer = jobOffers.filter(job => job.status === column.name);
+      });
+    });
+}
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<JobOffer[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -38,3 +41,5 @@ this.board.columns[0].offers = jobOffers.map(jobOffer => `${jobOffer.title} ${jo
     }
   }
 }
+
+
