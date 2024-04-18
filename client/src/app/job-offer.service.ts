@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { JobOffer } from './job-offer.model';
+import { JobOffer } from './models/job-offer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,7 @@ export class JobOfferService {
     return this.http.delete<JobOffer>(url);
   }
 
-scrapeJobOffer(url: string): Observable<JobOffer> {
+  scrapeJobOffer(url: string): Observable<JobOffer> {
     return this.http.post<JobOffer>(this.scrapeUrl, { url });
   }
 }

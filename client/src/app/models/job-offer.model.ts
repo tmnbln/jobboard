@@ -8,6 +8,6 @@ export interface JobOffer {
     benefits: string[];
     salary: number;
     contactEmail: string;
-    status: 'applied' | 'interviewing' | 'offered' | 'rejected';
+    status: 'applied' | 'in progress' | 'done' ;
     dateApplied: Date;
   }

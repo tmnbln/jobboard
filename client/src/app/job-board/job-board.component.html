@@ -1,0 +1,20 @@
+<div class="job-board">
+    <div class="board-columns" cdkDropListGroup>
+        <div class="board-column" *ngFor="let column of board.columns">
+            <div class="column-title">
+                <h3>{{ column.name }}</h3>
+            </div>
+            <div class="jobs-container" cdkDropList [cdkDropListData]="column.offers"
+                (cdkDropListDropped)="drop($event)">
+                <div class="job-card" *ngFor="let jobOffer of column.offers" cdkDrag>
+                    {{ jobOffer }}
+                    <div class="job-actions">
+                        <button>View</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
