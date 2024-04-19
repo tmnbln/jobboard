@@ -1,7 +1,10 @@
 <div class="container">
     <div class="header">
         <input type="text" id="url" [(ngModel)]="url" placeholder="Enter URL to Scrape..">
-        <button type="button" (click)="read()">Scrape✨</button>
+        <button type="button" (click)="read()" [disabled]="!url">Scrape✨</button>
+    </div>
+    <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner color="warn"></mat-spinner>
     </div>
     <form id="jobForm" form [formGroup]="form" (ngSubmit)="save()">
         <div class="form-group">
@@ -33,7 +36,7 @@
             <textarea id="notes" name="notes" formControlName="notes"></textarea>
         </div>
         <div class="form-group">
-            <button type="submit">💖 Save</button>
+            <button type="submit" [disabled]="!url">💖 Save</button>
         </div>
     </form>
 </div>

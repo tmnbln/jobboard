@@ -15,6 +15,7 @@ export class ScrapeFormComponent {
   jobOffer!: JobOffer;
   form: FormGroup;
   urlControl = new FormControl('');
+  isLoading: boolean = false;
 
   constructor(private http: HttpClient, private jobOfferService: JobOfferService, private snackBar: MatSnackBar) {
     this.form = new FormGroup({
@@ -29,8 +30,10 @@ export class ScrapeFormComponent {
   }
 
   read() {
+    this.isLoading = true;
     console.log("✨ Sending URL to server:", this.url);
     this.jobOfferService.readJobOffer(this.url).subscribe((data: any) => {
+      this.isLoading = false;
       this.form.patchValue({
         company: data.company,
         title: data.title,
@@ -42,6 +45,7 @@ export class ScrapeFormComponent {
       });
       console.log("✨ Received data:", data);
     }, error => {
+      this.isLoading = false;
       console.error("🦆 Failed to fetch data:", error);
     });
   }

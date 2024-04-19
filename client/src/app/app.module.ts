@@ -11,6 +11,8 @@ import { ScrapeFormComponent } from './scrape-form/scrape-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     DragDropModule,
     FormsModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     provideAnimationsAsync()
