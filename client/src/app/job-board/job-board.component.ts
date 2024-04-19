@@ -52,7 +52,7 @@ export class JobBoardComponent implements OnInit {
 
   delete(id: string): void {
     console.log(id);
-    this.jobOfferService.deleteJobOffer(this.offer.id).subscribe(
+    this.jobOfferService.deleteJobOffer(this.offer._id).subscribe(
       (response) => {
         console.log('Job offer deleted successfully:', response);
       },

@@ -4,38 +4,61 @@ import { executablePath } from 'puppeteer';
 
 puppeteer.use(StealthPlugin());
 
+const siteConfigs = {
+    "berlinstartupjobs.com": {
+        companySelector: 'a.ci__link',
+        titleSelector: 'h1.title',
+        locationSelector: 'a.bsj-tag.tag--location',
+        descriptionSelector: 'div.bsj-template__content',
+        salarySelector: '.salary',
+        cleanRegex: /\s\s+/g,
+        salaryRegex: /[\d,]+(?:\.?\d+)?\s*(k|K|\$|€|GBP|USD|EUR)?/,
+    },
+
+};
+
 export async function scrapeJobOffer(url: string) {
-    const browser = await puppeteer.launch( {headless: true, executablePath: executablePath()} );
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    const domain = new URL(url).hostname;
+    const config = siteConfigs[domain] || {};
 
-
-    const jobData = await page.evaluate(() => {
-        const companyElement = document.querySelector('a.ci__link');
-        const titleElement = document.querySelector('h1.title');
-        const locationElement = document.querySelector('a.bsj-tag.tag--location');
-        const descriptionElement = document.querySelector('div.bsj-template__content');
-        const requirementsElement = document.querySelector('div.bsj-template__content');
-        const benefitsElement = document.querySelector('div.bsj-tags');
-        const salaryElement = document.querySelector('.salary');
-        const url = window.location.href;
-
-        return {
-            company: companyElement ? companyElement.textContent : null,
-            title: titleElement ? titleElement.textContent : null,
-            location: locationElement ? locationElement.textContent : null,
-            description: descriptionElement ? descriptionElement.textContent : null,
-            requirements: requirementsElement ? requirementsElement.textContent : null,
-            benefits: benefitsElement ? benefitsElement.textContent : null,
-            salary: salaryElement ? salaryElement.textContent : null,
-            url: url
-        };
+    const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: executablePath(),
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
-    await browser.close();
-    return jobData;
+    const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
+
+    try {
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+
+        const jobData = await page.evaluate((config) => {
+            const extractText = (selector) => {
+                const element = document.querySelector(selector);
+                return element ? element.textContent.trim().replace(config.cleanRegex, ' ') : null;
+            };
+
+            return {
+                company: extractText(config.companySelector),
+                title: extractText(config.titleSelector),
+                location: extractText(config.locationSelector),
+                description: extractText(config.descriptionSelector),
+                salary: (() => {
+                    const element = document.querySelector(config.salarySelector);
+                    return element && config.salaryRegex.test(element.textContent) ? element.textContent.match(config.salaryRegex)[0] : null;
+                })(),
+                url: window.location.href,
+            };
+        }, config);
+
+        return jobData;
+    } catch (error) {
+        console.error('🦆 Failed to scrape the job offer:', error);
+        throw error;
+    } finally {
+        await browser.close();
+    }
 }
 
 export default { scrapeJobOffer };
-
-// https://berlinstartupjobs.com/engineering/search-ks-platform-lead-orb-software-worldcoin/
