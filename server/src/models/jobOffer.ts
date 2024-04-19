@@ -5,10 +5,9 @@ const JobOfferSchema = new mongoose.Schema({
     title: { type: String, required: true },
     location: String,
     description: String,
-    requirements: [String],
-    benefits: [String],
     salary: String,
     url: String,
+    notes: String,
     createdAt: { type: Date, default: Date.now },
     status: { type: String, default: 'Applied' }
 });

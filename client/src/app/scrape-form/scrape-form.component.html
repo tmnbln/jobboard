@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="header">
+        <input type="text" id="url" [(ngModel)]="url" placeholder="Enter URL to Scrape..">
+        <button type="button" (click)="read()">Scrape✨</button>
+    </div>
+    <form id="jobForm" form [formGroup]="form" (ngSubmit)="save()">
+        <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" formControlName="company">
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" formControlName="title">
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" formControlName="location">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" formControlName="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="text" id="salary" name="salary" formControlName="salary">
+        </div>
+        <div class="form-group">
+            <label for="url">URL</label>
+            <input type="text" id="url" name="url" formControlName="url">
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" formControlName="notes"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">💖 Save</button>
+        </div>
+    </form>
+</div>

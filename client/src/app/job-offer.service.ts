@@ -9,6 +9,7 @@ import { JobOffer } from './models/job-offer.model';
 export class JobOfferService {
   private apiUrl = 'http://localhost:3000/api/job-offers';
   private scrapeUrl = 'http://localhost:3000/api/scrape';
+  private readUrl = 'http://localhost:3000/api/read';
 
   constructor(private http: HttpClient) { }
 
@@ -40,5 +41,9 @@ export class JobOfferService {
 
   scrapeJobOffer(url: string): Observable<JobOffer> {
     return this.http.post<JobOffer>(this.scrapeUrl, { url });
+  }
+
+  readJobOffer(url: string): Observable<JobOffer> {
+    return this.http.post<JobOffer>(this.readUrl, { url });
   }
 }

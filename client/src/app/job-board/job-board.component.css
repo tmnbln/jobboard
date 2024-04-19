@@ -9,7 +9,7 @@
     flex-grow: 1;
     flex-basis: 0;
 
-    min-width: 300;
+    max-width: 300;
     margin: 50px;
     padding: 25px;
 
@@ -55,6 +55,12 @@
     cursor: pointer;
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05);
     position: relative;
+    transition: transform 0.3s ease-out;
+}
+
+.job-actions button:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
 }
 
 .cdk-drag-preview {
