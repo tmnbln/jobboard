@@ -11,6 +11,7 @@ import { JobOfferService } from '../job-offer.service';
   styleUrl: './job-board.component.css'
 })
 export class JobBoardComponent implements OnInit {
+  offer!: JobOffer;
 
   constructor(private jobOfferService: JobOfferService) { }
 
@@ -26,7 +27,7 @@ export class JobBoardComponent implements OnInit {
         column.jobOffer = jobOffers.filter(job => job.status === column.name);
       });
     });
-}
+  }
 
   drop(event: CdkDragDrop<JobOffer[]>) {
     if (event.previousContainer === event.container) {
@@ -42,10 +43,22 @@ export class JobBoardComponent implements OnInit {
       const newStatus = this.board.columns.find(column => column.jobOffer === event.container.data)?.name;
 
       if (jobOffer && newStatus) {
-          jobOffer.status = newStatus;
+        jobOffer.status = newStatus;
 
-          this.jobOfferService.updateJobOffer(jobOffer);
+        this.jobOfferService.updateJobOffer(jobOffer);
+      }
     }
   }
-}
+
+  delete(id: string): void {
+    console.log(id);
+    this.jobOfferService.deleteJobOffer(this.offer.id).subscribe(
+      (response) => {
+        console.log('Job offer deleted successfully:', response);
+      },
+      (error) => {
+        console.error('Error deleting job offer:', error);
+      }
+    );
+  }
 }

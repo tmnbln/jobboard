@@ -50,8 +50,26 @@ button {
     transition: transform 0.3s ease-out;
 }
 
+button:disabled {
+    background-color: #eeba7b;
+    color: white;
+    cursor: not-allowed;
+}
+
 button:hover {
     background-color: #ff5e00;
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
+}
+
+.spinner-container {
+    z-index: 1;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

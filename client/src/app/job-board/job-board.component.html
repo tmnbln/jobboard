@@ -10,10 +10,10 @@
                     {{ offer.title }} <br />
                     {{ offer.company }}
                     <div class="job-actions">
-                        <button>View</button>
+                        <button id="delete" *ngIf="column.name === 'Done'" (click)="delete(offer._id)">🗑️</button>
+                        <button id="view">View</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
