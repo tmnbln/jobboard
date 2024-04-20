@@ -4,6 +4,7 @@ import { JobOfferService } from '../job-offer.service';
 import { JobOffer } from '../models/job-offer.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-scrape-form',
@@ -16,6 +17,7 @@ export class ScrapeFormComponent {
   form: FormGroup;
   urlControl = new FormControl('');
   isLoading: boolean = false;
+  destroy$ = new Subject();
 
   constructor(private http: HttpClient, private jobOfferService: JobOfferService, private snackBar: MatSnackBar) {
     this.form = new FormGroup({
@@ -43,9 +45,11 @@ export class ScrapeFormComponent {
         url: data.url,
         notes: ''
       });
+      takeUntil(this.destroy$);
       console.log("✨ Received data:", data);
     }, error => {
       this.isLoading = false;
+      takeUntil(this.destroy$);
       console.error("🦆 Failed to fetch data:", error);
     });
   }
@@ -66,6 +70,12 @@ export class ScrapeFormComponent {
       this.snackBar.open('✨ Job offer saved successfully.', 'Close', {
         duration: 3000
       });
+      takeUntil(this.destroy$);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

@@ -14,7 +14,6 @@ export class JobOfferService {
   constructor(private http: HttpClient) { }
 
   getJobOffers(): Observable<JobOffer[]> {
-
     return this.http.get<JobOffer[]>(this.apiUrl);
   }
 
@@ -36,11 +35,9 @@ export class JobOfferService {
       });
   }
 
-deleteJobOffer(id: string): Observable<JobOffer> {
-
+  deleteJobOffer(id: string): Observable<JobOffer> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<JobOffer>(url)
-    
   }
 
   scrapeJobOffer(url: string): Observable<JobOffer> {

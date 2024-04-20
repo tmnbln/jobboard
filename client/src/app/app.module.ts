@@ -11,13 +11,18 @@ import { ScrapeFormComponent } from './scrape-form/scrape-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogBoxComponent } from './dialog-box/dialog-box.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
     AppComponent,
     JobBoardComponent,
     ScrapeFormComponent,
+    DialogBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +31,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     DragDropModule,
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [
     provideAnimationsAsync()

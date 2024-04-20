@@ -4,18 +4,25 @@ import { Component, OnInit } from '@angular/core';
 import { Board } from '../models/board.model';
 import { Column } from '../models/column.model';
 import { JobOfferService } from '../job-offer.service';
-import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-job-board',
   templateUrl: './job-board.component.html',
   styleUrl: './job-board.component.css'
 })
+
 export class JobBoardComponent implements OnInit {
   jobOffer!: JobOffer;
   destroy$ = new Subject();
 
-  constructor(private jobOfferService: JobOfferService) { }
+  constructor(
+    private jobOfferService: JobOfferService,
+    private matDialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
   board: Board = new Board('JobBoard', [
     new Column('Applied', []),
@@ -54,13 +61,20 @@ export class JobBoardComponent implements OnInit {
 
   deleteJobOffer(id: string): void {
     this.jobOfferService.deleteJobOffer(id).pipe(
-      tap(() => {console.log('success')}),
+      tap(() => { console.log('success') }),
       takeUntil(this.destroy$)
     ).subscribe()
+  }
+
+  openDialog(id: string): void {
+    const dialogRef = this.matDialog.open(DialogBoxComponent, {
+      data: { id: id }
+    });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
   }
+
 }

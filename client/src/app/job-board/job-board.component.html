@@ -10,7 +10,9 @@
                     {{ jobOffer.title }} <br />
                     {{ jobOffer.company }}
                     <div class="job-actions">
-                        <button id="delete" *ngIf="column.name === 'Done'" (click)="deleteJobOffer(jobOffer._id)">🗑️</button>
+                        <mat-dialog-actions>
+                        </mat-dialog-actions>
+                        <button id="delete" *ngIf="column.name === 'Done'" (click)="openDialog(jobOffer._id)">🗑️</button>
                         <button id="view">View</button>
                     </div>
                 </div>
