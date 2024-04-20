@@ -1,7 +1,7 @@
 .container {
     max-width: 600px;
     margin: auto;
-    background: #dedede;
+    background: var(--color-container-background);
     border-radius: 10px;
     padding: 20px;
 }
@@ -39,7 +39,7 @@
 
 button {
     padding: 10px 20px;
-    background-color: #f28d14;
+    background-color: var(--color-button);
     color: white;
     border-radius: 8px;
     border: none;
@@ -51,13 +51,13 @@ button {
 }
 
 button:disabled {
-    background-color: #eeba7b;
+    background-color: var(--color-button-disabled);
     color: white;
     cursor: not-allowed;
 }
 
 button:hover {
-    background-color: #ff5e00;
+    background-color: var(--color-button-hover);
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
 }

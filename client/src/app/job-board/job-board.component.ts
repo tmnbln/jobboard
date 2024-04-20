@@ -5,9 +5,8 @@ import { Board } from '../models/board.model';
 import { Column } from '../models/column.model';
 import { JobOfferService } from '../job-offer.service';
 import { Subject, takeUntil, tap } from 'rxjs';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-job-board',
@@ -21,8 +20,7 @@ export class JobBoardComponent implements OnInit {
 
   constructor(
     private jobOfferService: JobOfferService,
-    private matDialog: MatDialog,
-    private snackBar: MatSnackBar) { }
+    private matDialog: MatDialog) { }
 
   board: Board = new Board('JobBoard', [
     new Column('Applied', []),
@@ -31,6 +29,15 @@ export class JobBoardComponent implements OnInit {
   ]);
 
   ngOnInit(): void {
+    this.fetchJobOffers();
+
+    this.jobOfferService.getJobOfferAddedEvent()
+      .pipe(takeUntil(this.destroy$)).subscribe(() => {
+        this.fetchJobOffers();
+      });
+  }
+
+  fetchJobOffers(): void {
     this.jobOfferService.getJobOffers().subscribe(jobOffers => {
       this.board.columns.forEach(column => {
         column.jobOffer = jobOffers.filter(job => job.status === column.name);
@@ -67,7 +74,7 @@ export class JobBoardComponent implements OnInit {
   }
 
   openDialog(id: string): void {
-    const dialogRef = this.matDialog.open(DialogBoxComponent, {
+    this.matDialog.open(DialogBoxComponent, {
       data: { id: id }
     });
   }

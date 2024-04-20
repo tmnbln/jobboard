@@ -1,4 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --color-button: #f28d14;
+    --color-button-hover: #ff5e00;
+    --color-button-disabled: #eeba7b;
+    --color-container-background: #dedede;
+}
+
 body {
     margin: 0;
     font-family: "Lexend Deca", Roboto, "Helvetica Neue", sans-serif;

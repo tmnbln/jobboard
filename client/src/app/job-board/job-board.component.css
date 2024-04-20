@@ -15,7 +15,7 @@
 
     border-radius: 4px;
 
-    background-color: #dedede;
+    background-color: var(--color-container-background);
 }
 
 .column-title {

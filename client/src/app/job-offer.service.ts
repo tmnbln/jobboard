@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { JobOffer } from './models/job-offer.model';
 
 @Injectable({
@@ -11,7 +11,13 @@ export class JobOfferService {
   private scrapeUrl = 'http://localhost:3000/api/scrape';
   private readUrl = 'http://localhost:3000/api/read';
 
+  private jobOfferChanged$ = new Subject<void>();
+
   constructor(private http: HttpClient) { }
+
+  getJobOfferAddedEvent(): Observable<void> {
+    return this.jobOfferChanged$.asObservable();
+  }
 
   getJobOffers(): Observable<JobOffer[]> {
     return this.http.get<JobOffer[]>(this.apiUrl);
@@ -24,7 +30,9 @@ export class JobOfferService {
   }
 
   createJobOffer(jobOffer: JobOffer): Observable<JobOffer> {
-    return this.http.post<JobOffer>(this.apiUrl, jobOffer);
+    return this.http.post<JobOffer>(this.apiUrl, jobOffer).pipe(
+      tap(() => this.jobOfferChanged$.next())
+    );;
   }
 
   updateJobOffer(jobOffer: JobOffer): void {
@@ -37,7 +45,9 @@ export class JobOfferService {
 
   deleteJobOffer(id: string): Observable<JobOffer> {
     const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<JobOffer>(url)
+    return this.http.delete<JobOffer>(url).pipe(
+      tap(() => this.jobOfferChanged$.next())
+    );;
   }
 
   scrapeJobOffer(url: string): Observable<JobOffer> {
