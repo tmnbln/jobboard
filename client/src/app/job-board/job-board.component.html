@@ -6,11 +6,11 @@
             </div>
             <div class="jobs-container" cdkDropList [cdkDropListData]="column.jobOffer"
                 (cdkDropListDropped)="drop($event)">
-                <div class="job-card" *ngFor="let offer of column.jobOffer" cdkDrag>
-                    {{ offer.title }} <br />
-                    {{ offer.company }}
+                <div class="job-card" *ngFor="let jobOffer of column.jobOffer" cdkDrag>
+                    {{ jobOffer.title }} <br />
+                    {{ jobOffer.company }}
                     <div class="job-actions">
-                        <button id="delete" *ngIf="column.name === 'Done'" (click)="delete(offer._id)">🗑️</button>
+                        <button id="delete" *ngIf="column.name === 'Done'" (click)="deleteJobOffer(jobOffer._id)">🗑️</button>
                         <button id="view">View</button>
                     </div>
                 </div>

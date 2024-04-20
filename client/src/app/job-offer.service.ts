@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { JobOffer } from './models/job-offer.model';
 
 @Injectable({
@@ -14,10 +14,12 @@ export class JobOfferService {
   constructor(private http: HttpClient) { }
 
   getJobOffers(): Observable<JobOffer[]> {
+
     return this.http.get<JobOffer[]>(this.apiUrl);
   }
 
   getJobOffer(id: string): Observable<JobOffer> {
+
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<JobOffer>(url);
   }
@@ -34,9 +36,11 @@ export class JobOfferService {
       });
   }
 
-  deleteJobOffer(id: string): Observable<JobOffer> {
+deleteJobOffer(id: string): Observable<JobOffer> {
+
     const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<JobOffer>(url);
+    return this.http.delete<JobOffer>(url)
+    
   }
 
   scrapeJobOffer(url: string): Observable<JobOffer> {

@@ -19,7 +19,7 @@ const siteConfigs = {
 
 export async function scrapeJobOffer(url: string) {
     const domain = new URL(url).hostname;
-    const config = siteConfigs[domain] || {};
+    const config = siteConfigs[domain as keyof typeof siteConfigs] || {};
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -34,7 +34,7 @@ export async function scrapeJobOffer(url: string) {
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
         const jobData = await page.evaluate((config) => {
-            const extractText = (selector) => {
+            const extractText = (selector: any) => {
                 const element = document.querySelector(selector);
                 return element ? element.textContent.trim().replace(config.cleanRegex, ' ') : null;
             };
@@ -46,7 +46,11 @@ export async function scrapeJobOffer(url: string) {
                 description: extractText(config.descriptionSelector),
                 salary: (() => {
                     const element = document.querySelector(config.salarySelector);
-                    return element && config.salaryRegex.test(element.textContent) ? element.textContent.match(config.salaryRegex)[0] : null;
+                    if (element && element.textContent) {
+                        const match = config.salaryRegex.test(element.textContent) ? RegExp(config.salaryRegex).exec(element.textContent) : null;
+                        return match ? match[0] : null;
+                    }
+                    return null;
                 })(),
                 url: window.location.href,
             };
@@ -61,4 +65,6 @@ export async function scrapeJobOffer(url: string) {
     }
 }
 
+
 export default { scrapeJobOffer };
+// https://berlinstartupjobs.com/engineering/search-ks-platform-lead-orb-software-worldcoin/
