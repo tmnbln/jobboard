@@ -9,13 +9,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './dialog-box.component.css'
 })
 export class DialogBoxComponent {
-  constructor(
+  constructor (
     @Inject(MAT_DIALOG_DATA) public data: { id: string },
     public dialogRef: MatDialogRef<DialogBoxComponent>,
     private jobOfferService: JobOfferService,
     private snackBar: MatSnackBar) { }
 
-  deleteJobOffer(): void {
+  deleteJobOffer (): void {
     this.jobOfferService.deleteJobOffer(this.data.id).subscribe({
       next: () => {
         console.log('✨ Job offer deleted successfully.');

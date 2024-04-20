@@ -10,8 +10,8 @@ describe('DialogBoxComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DialogBoxComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(DialogBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

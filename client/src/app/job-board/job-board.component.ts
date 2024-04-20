@@ -18,7 +18,7 @@ export class JobBoardComponent implements OnInit {
   jobOffer!: JobOffer;
   destroy$ = new Subject();
 
-  constructor(
+  constructor (
     private jobOfferService: JobOfferService,
     private matDialog: MatDialog) { }
 
@@ -28,7 +28,7 @@ export class JobBoardComponent implements OnInit {
     new Column('Done', [])
   ]);
 
-  ngOnInit(): void {
+  ngOnInit (): void {
     this.fetchJobOffers();
 
     this.jobOfferService.getJobOfferAddedEvent()
@@ -37,7 +37,7 @@ export class JobBoardComponent implements OnInit {
       });
   }
 
-  fetchJobOffers(): void {
+  fetchJobOffers (): void {
     this.jobOfferService.getJobOffers().subscribe(jobOffers => {
       this.board.columns.forEach(column => {
         column.jobOffer = jobOffers.filter(job => job.status === column.name);
@@ -45,7 +45,7 @@ export class JobBoardComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<JobOffer[]>) {
+  drop (event: CdkDragDrop<JobOffer[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -66,20 +66,20 @@ export class JobBoardComponent implements OnInit {
     }
   }
 
-  deleteJobOffer(id: string): void {
+  deleteJobOffer (id: string): void {
     this.jobOfferService.deleteJobOffer(id).pipe(
-      tap(() => { console.log('success') }),
+      tap(() => { console.log('success'); }),
       takeUntil(this.destroy$)
-    ).subscribe()
+    ).subscribe();
   }
 
-  openDialog(id: string): void {
+  openDialog (id: string): void {
     this.matDialog.open(DialogBoxComponent, {
       data: { id: id }
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.destroy$.next(true);
     this.destroy$.complete();
   }

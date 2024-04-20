@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import "@fontsource/lexend-deca";
+import '@fontsource/lexend-deca';
 
 @Component({
   selector: 'app-root',

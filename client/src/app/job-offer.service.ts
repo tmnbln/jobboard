@@ -13,29 +13,29 @@ export class JobOfferService {
 
   private jobOfferChanged$ = new Subject<void>();
 
-  constructor(private http: HttpClient) { }
+  constructor (private http: HttpClient) { }
 
-  getJobOfferAddedEvent(): Observable<void> {
+  getJobOfferAddedEvent (): Observable<void> {
     return this.jobOfferChanged$.asObservable();
   }
 
-  getJobOffers(): Observable<JobOffer[]> {
+  getJobOffers (): Observable<JobOffer[]> {
     return this.http.get<JobOffer[]>(this.apiUrl);
   }
 
-  getJobOffer(id: string): Observable<JobOffer> {
+  getJobOffer (id: string): Observable<JobOffer> {
 
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<JobOffer>(url);
   }
 
-  createJobOffer(jobOffer: JobOffer): Observable<JobOffer> {
+  createJobOffer (jobOffer: JobOffer): Observable<JobOffer> {
     return this.http.post<JobOffer>(this.apiUrl, jobOffer).pipe(
       tap(() => this.jobOfferChanged$.next())
     );;
   }
 
-  updateJobOffer(jobOffer: JobOffer): void {
+  updateJobOffer (jobOffer: JobOffer): void {
     this.http.patch(`${this.apiUrl}/${jobOffer._id}`, jobOffer)
       .subscribe({
         next: response => console.log('Update successful', response),
@@ -43,18 +43,18 @@ export class JobOfferService {
       });
   }
 
-  deleteJobOffer(id: string): Observable<JobOffer> {
+  deleteJobOffer (id: string): Observable<JobOffer> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<JobOffer>(url).pipe(
       tap(() => this.jobOfferChanged$.next())
     );;
   }
 
-  scrapeJobOffer(url: string): Observable<JobOffer> {
+  scrapeJobOffer (url: string): Observable<JobOffer> {
     return this.http.post<JobOffer>(this.scrapeUrl, { url });
   }
 
-  readJobOffer(url: string): Observable<JobOffer> {
+  readJobOffer (url: string): Observable<JobOffer> {
     return this.http.post<JobOffer>(this.readUrl, { url });
   }
 }

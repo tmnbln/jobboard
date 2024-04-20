@@ -10,8 +10,8 @@ describe('ScrapeFormComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ScrapeFormComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(ScrapeFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

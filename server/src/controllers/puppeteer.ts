@@ -5,64 +5,64 @@ import { executablePath } from 'puppeteer';
 puppeteer.use(StealthPlugin());
 
 const siteConfigs = {
-    "berlinstartupjobs.com": {
-        companySelector: 'a.ci__link',
-        titleSelector: 'h1.title',
-        locationSelector: 'a.bsj-tag.tag--location',
-        descriptionSelector: 'div.bsj-template__content',
-        salarySelector: '.salary',
-        cleanRegex: /\s\s+/g,
-        salaryRegex: /[\d,]+(?:\.?\d+)?\s*(k|K|\$|€|GBP|USD|EUR)?/,
-    },
+  'berlinstartupjobs.com': {
+    companySelector: 'a.ci__link',
+    titleSelector: 'h1.title',
+    locationSelector: 'a.bsj-tag.tag--location',
+    descriptionSelector: 'div.bsj-template__content',
+    salarySelector: '.salary',
+    cleanRegex: /\s\s+/g,
+    salaryRegex: /[\d,]+(?:\.?\d+)?\s*(k|K|\$|€|GBP|USD|EUR)?/,
+  },
 
 };
 
-export async function scrapeJobOffer(url: string) {
-    const domain = new URL(url).hostname;
-    const config = siteConfigs[domain as keyof typeof siteConfigs] || {};
+export async function scrapeJobOffer (url: string) {
+  const domain = new URL(url).hostname;
+  const config = siteConfigs[domain as keyof typeof siteConfigs] || {};
 
-    const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: executablePath(),
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: executablePath(),
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
 
-    const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
+  const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
 
-    try {
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+  try {
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
-        const jobData = await page.evaluate((config) => {
-            const extractText = (selector: any) => {
-                const element = document.querySelector(selector);
-                return element ? element.textContent.trim().replace(config.cleanRegex, ' ') : null;
-            };
+    const jobData = await page.evaluate((config) => {
+      const extractText = (selector: any) => {
+        const element = document.querySelector(selector);
+        return element ? element.textContent.trim().replace(config.cleanRegex, ' ') : null;
+      };
 
-            return {
-                company: extractText(config.companySelector),
-                title: extractText(config.titleSelector),
-                location: extractText(config.locationSelector),
-                description: extractText(config.descriptionSelector),
-                salary: (() => {
-                    const element = document.querySelector(config.salarySelector);
-                    if (element && element.textContent) {
-                        const match = config.salaryRegex.test(element.textContent) ? RegExp(config.salaryRegex).exec(element.textContent) : null;
-                        return match ? match[0] : null;
-                    }
-                    return null;
-                })(),
-                url: window.location.href,
-            };
-        }, config);
+      return {
+        company: extractText(config.companySelector),
+        title: extractText(config.titleSelector),
+        location: extractText(config.locationSelector),
+        description: extractText(config.descriptionSelector),
+        salary: (() => {
+          const element = document.querySelector(config.salarySelector);
+          if (element && element.textContent) {
+            const match = config.salaryRegex.test(element.textContent) ? RegExp(config.salaryRegex).exec(element.textContent) : null;
+            return match ? match[0] : null;
+          }
+          return null;
+        })(),
+        url: window.location.href,
+      };
+    }, config);
 
-        return jobData;
-    } catch (error) {
-        console.error('🦆 Failed to scrape the job offer:', error);
-        throw error;
-    } finally {
-        await browser.close();
-    }
+    return jobData;
+  } catch (error) {
+    console.error('🦆 Failed to scrape the job offer:', error);
+    throw error;
+  } finally {
+    await browser.close();
+  }
 }
 
 

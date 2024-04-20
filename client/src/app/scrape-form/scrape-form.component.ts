@@ -19,7 +19,7 @@ export class ScrapeFormComponent {
   isLoading: boolean = false;
   destroy$ = new Subject();
 
-  constructor(private http: HttpClient, private jobOfferService: JobOfferService, private snackBar: MatSnackBar) {
+  constructor (private http: HttpClient, private jobOfferService: JobOfferService, private snackBar: MatSnackBar) {
     this.form = new FormGroup({
       company: new FormControl(''),
       title: new FormControl(''),
@@ -31,9 +31,9 @@ export class ScrapeFormComponent {
     });
   }
 
-  read() {
+  read () {
     this.isLoading = true;
-    console.log("✨ Sending URL to server:", this.url);
+    console.log('✨ Sending URL to server:', this.url);
     this.jobOfferService.readJobOffer(this.url).subscribe((data: any) => {
       this.isLoading = false;
       this.form.patchValue({
@@ -46,15 +46,15 @@ export class ScrapeFormComponent {
         notes: ''
       });
       takeUntil(this.destroy$);
-      console.log("✨ Received data:", data);
+      console.log('✨ Received data:', data);
     }, error => {
       this.isLoading = false;
       takeUntil(this.destroy$);
-      console.error("🦆 Failed to fetch data:", error);
+      console.error('🦆 Failed to fetch data:', error);
     });
   }
 
-  save() {
+  save () {
     this.jobOffer = {
       ...this.jobOffer,
       company: this.form.value.company,
@@ -74,7 +74,7 @@ export class ScrapeFormComponent {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.destroy$.next(true);
     this.destroy$.complete();
   }
