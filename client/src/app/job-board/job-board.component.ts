@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Board } from '../models/board.model';
 import { Column } from '../models/column.model';
 import { JobOfferService } from '../job-offer.service';
+import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-job-board',
@@ -11,7 +12,8 @@ import { JobOfferService } from '../job-offer.service';
   styleUrl: './job-board.component.css'
 })
 export class JobBoardComponent implements OnInit {
-  offer!: JobOffer;
+  jobOffer!: JobOffer;
+  destroy$ = new Subject();
 
   constructor(private jobOfferService: JobOfferService) { }
 
@@ -50,15 +52,15 @@ export class JobBoardComponent implements OnInit {
     }
   }
 
-  delete(id: string): void {
-    console.log(id);
-    this.jobOfferService.deleteJobOffer(this.offer._id).subscribe(
-      (response) => {
-        console.log('Job offer deleted successfully:', response);
-      },
-      (error) => {
-        console.error('Error deleting job offer:', error);
-      }
-    );
+  deleteJobOffer(id: string): void {
+    this.jobOfferService.deleteJobOffer(id).pipe(
+      tap(() => {console.log('success')}),
+      takeUntil(this.destroy$)
+    ).subscribe()
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
