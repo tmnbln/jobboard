@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Job Offer Extension</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Job Offer Details</h1>
+  <form id="jobOfferForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="company">Company:</label>
+    <input type="text" id="company" name="company" required>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" required></textarea>
+
+    <label for="notes">Notes:</label>
+    <textarea id="notes" name="notes" rows="2"></textarea>
+
+    <button type="submit">Save</button>
+  </form>
+
+  <script src="popup.js"></script>
+</body>
+</html>

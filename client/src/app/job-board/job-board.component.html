@@ -13,8 +13,8 @@
                         <mat-dialog-actions>
                         </mat-dialog-actions>
                         <button id="delete" *ngIf="column.name === 'Done'"
-                            (click)="openDeleteDialog(jobOffer._id)">🗑️</button>
-                        <button id="view" (click)="openViewDialog(jobOffer)">View</button>
+                            (click)="openDeleteDialog(jobOffer)">🗑️</button>
+                        <button id="view" (click)="openViewDialog()">View</button>
                     </div>
                 </div>
             </div>

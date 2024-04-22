@@ -11,13 +11,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class DialogBoxComponent {
   @Output() confirmed = new EventEmitter<void>();
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {
-      title: string;
-      message: string;
-      type?: 'confirm' | 'info';
-    },
-    public dialogRef: MatDialogRef<DialogBoxComponent>) { }
+constructor(
+@Inject(MAT_DIALOG_DATA) public data: {
+title: string;
+message: string;
+optionalText?: string;
+type?: 'confirm' | 'info';
+},
+public dialogRef: MatDialogRef<DialogBoxComponent>) { }
 
   onConfirm(): void {
     this.confirmed.emit();
