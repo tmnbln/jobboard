@@ -29,31 +29,6 @@
     flex-grow: 1;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: var(--color-button);
-    color: white;
-    border-radius: 8px;
-    border: none;
-    margin-left: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease-out;
-}
-
-button:disabled {
-    background-color: var(--color-button-disabled);
-    color: white;
-    cursor: not-allowed;
-}
-
-button:hover {
-    background-color: var(--color-button-hover);
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
-}
-
 .form-button {
     display: flex;
     justify-content: flex-end;
@@ -69,4 +44,8 @@ button:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.form-container {
+    width: 100% !important;
 }

@@ -10,13 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-scrape-form',
   templateUrl: './scrape-form.component.html',
   styleUrls: ['./scrape-form.component.css'],
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatProgressSpinnerModule, MatIconModule, ReactiveFormsModule, MatInputModule]
+  imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatProgressSpinnerModule, MatIconModule, ReactiveFormsModule, MatInputModule]
 })
 export class ScrapeFormComponent {
   url: string = '';

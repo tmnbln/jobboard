@@ -1,7 +1,8 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
-    <h3>Delete Offer?</h3>
-        <mat-dialog-actions>
-            <button mat-raised-button (click)="deleteJobOffer()">Delete<mat-icon>delete</mat-icon></button>
-            <button mat-raised-button color="warn" (click)="dialogRef.close()">Cancel<mat-icon>close</mat-icon></button>
-        </mat-dialog-actions>
+    <p>{{ data.message }}</p>
+    <mat-dialog-actions>
+        <button mat-raised-button (click)="onConfirm()" *ngIf="data.type === 'confirm'">OK</button>
+        <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+    </mat-dialog-actions>
 </mat-dialog-content>

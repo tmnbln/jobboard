@@ -1,48 +1,52 @@
-<div class="container">
-    <div class="header">
-        <form id="scrapeForm" [formGroup]="form" (ngSubmit)="read()">
-            <mat-form-field>
-                <mat-label>Enter URL to Scrape..</mat-label>
-                <input matInput type="text" id="url" formControlName="url">
-            </mat-form-field>
-            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Scrape
-                <mat-icon>auto_awesome</mat-icon></button>
-        </form>
-    </div>
-    <div *ngIf="isLoading" class="spinner-container">
-        <mat-spinner color="warn"></mat-spinner>
-    </div>
-    <form id="jobForm" [formGroup]="form" (ngSubmit)="save()">
-        <mat-form-field>
-            <mat-label>Company</mat-label>
-            <input matInput type="text" id="company" name="company" formControlName="company">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input matInput type="text" id="title" name="title" formControlName="title">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Location</mat-label>
-            <input matInput type="text" id="location" name="location" formControlName="location">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Description</mat-label>
-            <textarea matInput id="description" name="description" formControlName="description"></textarea>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Salary</mat-label>
-            <input matInput type="text" id="salary" name="salary" formControlName="salary">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>URL</mat-label>
-            <input matInput type="text" id="url" name="url" formControlName="url">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Notes</mat-label>
-            <textarea matInput id="notes" name="notes" formControlName="notes"></textarea>
-        </mat-form-field>
-        <div class="form-button">
-            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+    <div class="container">
+        <div class="header">
+            <form id="scrapeForm" [formGroup]="form" (ngSubmit)="read()">
+                <mat-form-field>
+                    <mat-label>Enter URL to Scrape..</mat-label>
+                    <input matInput type="url" id="url" formControlName="url" required pattern="https?://.+">
+                    <mat-error *ngIf="form.get('url')?.invalid">Please enter a valid URL</mat-error>
+                </mat-form-field>
+                <button id="scrape" mat-raised-button color="warn" type="submit" [disabled]="!form.valid">Scrape
+                    <mat-icon>auto_awesome</mat-icon></button>
+            </form>
         </div>
-    </form>
-</div>
+        <div *ngIf="isLoading" class="spinner-container">
+            <mat-spinner color="warn"></mat-spinner>
+        </div>
+        <div class="form-container">
+            <form id="jobForm" [formGroup]="form" (ngSubmit)="save()">
+                <mat-form-field>
+                    <mat-label>Company</mat-label>
+                    <input matInput type="text" id="company" name="company" formControlName="company">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Title</mat-label>
+                    <input matInput type="text" id="title" name="title" formControlName="title">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Location</mat-label>
+                    <input matInput type="text" id="location" name="location" formControlName="location">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput id="description" name="description" formControlName="description"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Salary</mat-label>
+                    <input matInput type="text" id="salary" name="salary" formControlName="salary">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>URL</mat-label>
+                    <input matInput type="text" id="url" name="url" formControlName="url">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Notes</mat-label>
+                    <textarea matInput id="notes" name="notes" formControlName="notes"></textarea>
+                </mat-form-field>
+                <div class="form-button">
+                    <button id="save" mat-raised-button color="warn" type="submit"
+                        [disabled]="!form.valid">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>

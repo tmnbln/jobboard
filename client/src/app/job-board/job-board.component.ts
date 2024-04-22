@@ -7,6 +7,8 @@ import { JobOfferService } from '../job-offer.service';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+import { ScrapeFormComponent } from '../scrape-form/scrape-form.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-job-board',
@@ -18,9 +20,10 @@ export class JobBoardComponent implements OnInit {
   jobOffer!: JobOffer;
   destroy$ = new Subject();
 
-  constructor (
+  constructor(
     private jobOfferService: JobOfferService,
-    private matDialog: MatDialog) { }
+    private matDialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
   board: Board = new Board('JobBoard', [
     new Column('Applied', []),
@@ -28,7 +31,7 @@ export class JobBoardComponent implements OnInit {
     new Column('Done', [])
   ]);
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.fetchJobOffers();
 
     this.jobOfferService.getJobOfferAddedEvent()
@@ -37,7 +40,7 @@ export class JobBoardComponent implements OnInit {
       });
   }
 
-  fetchJobOffers (): void {
+  fetchJobOffers(): void {
     this.jobOfferService.getJobOffers().subscribe(jobOffers => {
       this.board.columns.forEach(column => {
         column.jobOffer = jobOffers.filter(job => job.status === column.name);
@@ -45,7 +48,7 @@ export class JobBoardComponent implements OnInit {
     });
   }
 
-  drop (event: CdkDragDrop<JobOffer[]>) {
+  drop(event: CdkDragDrop<JobOffer[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -66,20 +69,60 @@ export class JobBoardComponent implements OnInit {
     }
   }
 
-  deleteJobOffer (id: string): void {
+  deleteJobOffer(id: string): void {
     this.jobOfferService.deleteJobOffer(id).pipe(
       tap(() => { console.log('success'); }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  openDialog (id: string): void {
-    this.matDialog.open(DialogBoxComponent, {
-      data: { id: id }
+  openDeleteDialog(id: string): void {
+    const dialogRef = this.matDialog.open(DialogBoxComponent, {
+      data: {
+        title: 'Delete Offer?',
+        message: 'Are you sure you want to delete this offer?',
+        type: 'confirm'
+      }
+    });
+
+    dialogRef.componentInstance.confirmed.subscribe(() => {
+      this.jobOfferService.deleteJobOffer(id).subscribe({
+        next: () => {
+          console.log('✨ Job offer deleted successfully.');
+          dialogRef.close();
+        },
+        error: (err) => {
+          console.error('🦆 Failed to delete job offer.', err);
+          dialogRef.close();
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.snackBar.open('✨ Offer deleted successfully', 'Close', {
+          duration: 3000
+        });
+      });
     });
   }
 
-  ngOnDestroy (): void {
+  openScrapeDialog(): void {
+    const dialogRef = this.matDialog.open(ScrapeFormComponent, {
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      data: {
+        title: 'Scrape Offers',
+        message: 'Enter URL to Scrape offer.'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fetchJobOffers();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
   }

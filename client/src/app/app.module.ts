@@ -22,7 +22,7 @@ import { MatFormField } from '@angular/material/form-field';
   declarations: [
     AppComponent,
     JobBoardComponent,
-    DialogBoxComponent,
+    DialogBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +41,6 @@ import { MatFormField } from '@angular/material/form-field';
   providers: [
     provideAnimationsAsync()
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

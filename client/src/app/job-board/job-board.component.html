@@ -13,11 +13,14 @@
                         <mat-dialog-actions>
                         </mat-dialog-actions>
                         <button id="delete" *ngIf="column.name === 'Done'"
-                            (click)="openDialog(jobOffer._id)">🗑️</button>
+                            (click)="openDeleteDialog(jobOffer._id)">🗑️</button>
                         <button id="view">View</button>
                     </div>
                 </div>
             </div>
+            <button id="add" *ngIf="column.name === 'Applied'"
+            mat-raised-button color="warn"
+            (click)="openScrapeDialog()"><mat-icon>add_circle</mat-icon>Add new</button>
         </div>
     </div>
 </div>
