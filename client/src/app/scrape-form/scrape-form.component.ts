@@ -107,23 +107,19 @@ export class ScrapeFormComponent {
   }
 
   update() {
-    this.jobOffer = {
-      ...this.jobOffer,
-      company: this.form.value.company,
-      title: this.form.value.title,
-      location: this.form.value.location,
-      description: this.form.value.description,
-      salary: this.form.value.salary,
-      url: this.form.value.url,
-      notes: this.form.value.notes
-    };
-
-    // this.jobOfferService.updateJobOffer(this.data.jobOffer).subscribe(() => {
-    //   this.snackBar.open('✨ Job offer updated successfully.', 'Close', {
-    //     duration: 3000
-    //   });
-    //   takeUntil(this.destroy$);
-    // });
+    const updatedOffer = { ...this.data.jobOffer, ...this.form.value };
+    this.jobOfferService.updateJobOffer(updatedOffer).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: () => {
+        this.snackBar.open('✨ Job offer updated successfully.', 'Close', { duration: 3000 });
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        console.error('Failed to update job offer', err);
+        this.snackBar.open('Error updating job offer.', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   close(): void {
