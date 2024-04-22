@@ -63,8 +63,7 @@ export class JobBoardComponent implements OnInit {
 
       if (jobOffer && newStatus) {
         jobOffer.status = newStatus;
-
-        this.jobOfferService.updateJobOffer(jobOffer);
+        this.jobOfferService.updateJobOffer(jobOffer).subscribe({});
       }
     }
   }
