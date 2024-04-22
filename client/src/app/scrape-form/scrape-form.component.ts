@@ -117,7 +117,7 @@ export class ScrapeFormComponent {
       },
       error: (err) => {
         console.error('Failed to update job offer', err);
-        this.snackBar.open('Error updating job offer.', 'Close', { duration: 3000 });
+        this.snackBar.open('🦆 Error updating job offer.', 'Close', { duration: 3000 });
       }
     });
   }
