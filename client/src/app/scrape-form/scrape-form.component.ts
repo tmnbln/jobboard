@@ -1,25 +1,37 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { JobOfferService } from '../job-offer.service';
 import { JobOffer } from '../models/job-offer.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-scrape-form',
   templateUrl: './scrape-form.component.html',
-  styleUrls: ['./scrape-form.component.css']
+  styleUrls: ['./scrape-form.component.css'],
+  standalone: true,
+  imports: [CommonModule, MatFormFieldModule, MatProgressSpinnerModule, MatIconModule, ReactiveFormsModule, MatInputModule]
 })
 export class ScrapeFormComponent {
   url: string = '';
   jobOffer!: JobOffer;
-  form: FormGroup;
   urlControl = new FormControl('');
   isLoading: boolean = false;
   destroy$ = new Subject();
+  form!: FormGroup;
 
-  constructor (private http: HttpClient, private jobOfferService: JobOfferService, private snackBar: MatSnackBar) {
+  constructor(
+    private jobOfferService: JobOfferService,
+    private snackBar: MatSnackBar,
+  ) {}
+
+  ngOnInit() {
     this.form = new FormGroup({
       company: new FormControl(''),
       title: new FormControl(''),
@@ -31,8 +43,9 @@ export class ScrapeFormComponent {
     });
   }
 
-  read () {
+  read() {
     this.isLoading = true;
+    this.url = this.form.get('url')?.value;
     console.log('✨ Sending URL to server:', this.url);
     this.jobOfferService.readJobOffer(this.url).subscribe((data: any) => {
       this.isLoading = false;
@@ -54,7 +67,7 @@ export class ScrapeFormComponent {
     });
   }
 
-  save () {
+  save() {
     this.jobOffer = {
       ...this.jobOffer,
       company: this.form.value.company,
@@ -74,7 +87,7 @@ export class ScrapeFormComponent {
     });
   }
 
-  ngOnDestroy (): void {
+  ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
   }

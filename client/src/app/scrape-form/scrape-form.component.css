@@ -1,4 +1,6 @@
 .container {
+    display: flex;
+    flex-direction: column;
     max-width: 600px;
     margin: auto;
     background: var(--color-container-background);
@@ -8,6 +10,7 @@
 
 .header {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 20px;
 }
@@ -19,22 +22,11 @@
     border: none;
 }
 
-.form-group {
-    margin-bottom: 15px;
-    margin-right: 14px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input[type="text"],
-.form-group textarea {
-    width: 99%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
+#jobForm, #scrapeForm{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 button {
@@ -60,6 +52,11 @@ button:hover {
     background-color: var(--color-button-hover);
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
+}
+
+.form-button {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .spinner-container {

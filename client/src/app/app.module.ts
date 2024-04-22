@@ -16,12 +16,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormField } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     AppComponent,
     JobBoardComponent,
-    ScrapeFormComponent,
     DialogBoxComponent,
   ],
   imports: [
@@ -34,7 +34,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    ScrapeFormComponent,
+    MatFormField
   ],
   providers: [
     provideAnimationsAsync()
