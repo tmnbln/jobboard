@@ -2,8 +2,9 @@
 <mat-dialog-content>
     <p>{{ data.message }}</p>
     <p>{{ data.optionalText }}</p>
-    <mat-dialog-actions>
-        <button mat-raised-button (click)="onConfirm()" *ngIf="data.type === 'confirm'">OK</button>
-        <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button (click)="onCancel()">{{data.cancelText}}</button>
+        <button mat-raised-button color="warn" (click)="onConfirm()" *ngIf="data.type === 'confirm'">{{data.confirmText}}</button>
     </mat-dialog-actions>
+
 </mat-dialog-content>

@@ -69,19 +69,13 @@ export class JobBoardComponent implements OnInit {
     }
   }
 
-  deleteJobOffer(id: string): void {
-    this.jobOfferService.deleteJobOffer(id).pipe(
-      tap(() => { console.log('success'); }),
-      takeUntil(this.destroy$)
-    ).subscribe();
-  }
-
-openDeleteDialog(jobOffer: JobOffer): void {
+  openDeleteDialog(jobOffer: JobOffer): void {
     const dialogRef = this.matDialog.open(DialogBoxComponent, {
       data: {
         title: 'Delete Offer?',
         message: 'Are you sure you want to delete this offer:',
         optionalText: jobOffer.title,
+        confirmText: 'Delete',
         type: 'confirm'
       }
     });
@@ -107,30 +101,24 @@ openDeleteDialog(jobOffer: JobOffer): void {
   }
 
   openScrapeDialog(): void {
-    const dialogRef = this.matDialog.open(ScrapeFormComponent, {
+    this.matDialog.open(ScrapeFormComponent, {
       data: {
-        showHeader: true,
+        fromScrape: true,
         title: 'Scrape Offers',
         message: 'Enter URL to Scrape offer.'
       },
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.fetchJobOffers();
+  openViewDialog(jobOffer: JobOffer): void {
+    this.matDialog.open(ScrapeFormComponent, {
+      data: {
+        jobOffer: jobOffer,
+        fromScrape: false,
+        title: 'View Offer'
       }
     });
   }
-
-openViewDialog(): void {
-const dialogRef = this.matDialog.open(ScrapeFormComponent, {
-data: { jobOffer: this.jobOffer, showHeader: false }
-});
-
-dialogRef.afterClosed().subscribe(result => {
-console.log('The dialog was closed');
-});
-}
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
