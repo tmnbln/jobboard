@@ -99,9 +99,8 @@ export class ScrapeFormComponent {
     };
 
     this.jobOfferService.createJobOffer(this.jobOffer).subscribe(() => {
-      this.snackBar.open('✨ Job offer saved successfully.', 'Close', {
-        duration: 3000
-      });
+      this.snackBar.open('✨ Job offer saved successfully.', 'Close', { duration: 3000 });
+      this.dialogRef.close(true);
       takeUntil(this.destroy$);
     });
   }
