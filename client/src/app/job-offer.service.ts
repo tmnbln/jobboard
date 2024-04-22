@@ -35,16 +35,15 @@ export class JobOfferService {
     );;
   }
 
-  updateJobOffer(jobOffer: JobOffer): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${jobOffer._id}`, jobOffer).pipe(
-      tap(() => {
-        this.jobOfferChanged$.next();
-        console.log('✨ Update successful.');
-      })
-    );
+  updateJobOffer (jobOffer: JobOffer): void {
+    this.http.patch(`${this.apiUrl}/${jobOffer._id}`, jobOffer)
+      .subscribe({
+        next: response => console.log('Update successful', response),
+        error: error => console.error('Error updating job offer', error)
+      });
   }
 
-  deleteJobOffer(id: string): Observable<JobOffer> {
+  deleteJobOffer (id: string): Observable<JobOffer> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<JobOffer>(url).pipe(
       tap(() => this.jobOfferChanged$.next())
