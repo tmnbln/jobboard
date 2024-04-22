@@ -107,9 +107,8 @@ export class JobBoardComponent implements OnInit {
 
   openScrapeDialog(): void {
     const dialogRef = this.matDialog.open(ScrapeFormComponent, {
-      maxWidth: '90vw',
-      maxHeight: '90vh',
       data: {
+        showHeader: true,
         title: 'Scrape Offers',
         message: 'Enter URL to Scrape offer.'
       },
@@ -119,6 +118,16 @@ export class JobBoardComponent implements OnInit {
       if (result) {
         this.fetchJobOffers();
       }
+    });
+  }
+
+  openViewDialog(jobOffer: JobOffer): void {
+    const dialogRef = this.matDialog.open(ScrapeFormComponent, {
+      data: { jobOffer: jobOffer, showHeader: false },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
     });
   }
 

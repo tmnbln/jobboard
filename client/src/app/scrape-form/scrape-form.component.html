@@ -1,5 +1,5 @@
     <div class="container">
-        <div class="header">
+        <div class="header" *ngIf="showHeader">
             <form id="scrapeForm" [formGroup]="form" (ngSubmit)="read()">
                 <mat-form-field>
                     <mat-label>Enter URL to Scrape..</mat-label>
