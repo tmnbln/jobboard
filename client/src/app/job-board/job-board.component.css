@@ -92,3 +92,17 @@
     margin-left: 10px;
     margin-top: 10px;
 }
+
+.mat-icon, .add-new-btn {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.job-card-btns {
+    display: flex;
+    justify-content: flex-end;
+
+}

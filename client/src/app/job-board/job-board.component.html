@@ -10,7 +10,7 @@
                             {{ jobOffer.title }} <br />
                             {{ jobOffer.company }}
                         </div>
-                        <div>
+                        <div class="job-card-btns">
                             <button class="buttons" mat-raised-button *ngIf="column.name === 'Done'"
                                 (click)="openDeleteDialog(jobOffer)">
                                 <mat-icon>delete</mat-icon>
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-                <mat-card-actions *ngIf="column.name === 'Applied'">
+                <mat-card-actions class="add-new-btn" *ngIf="column.name === 'Applied'">
                     <button mat-raised-button color="accent" (click)="openScrapeDialog()">
                         <mat-icon>add_circle</mat-icon>Add new
                     </button>
