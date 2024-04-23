@@ -4,16 +4,26 @@ import { Component, OnInit } from '@angular/core';
 import { Board } from '../models/board.model';
 import { Column } from '../models/column.model';
 import { JobOfferService } from '../job-offer.service';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { ScrapeFormComponent } from '../scrape-form/scrape-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-job-board',
   templateUrl: './job-board.component.html',
-  styleUrl: './job-board.component.css'
+  styleUrl: './job-board.component.css',
+  standalone: true,
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, CommonModule, MatDialogModule, DragDropModule]
 })
 
 export class JobBoardComponent implements OnInit {

@@ -11,7 +11,7 @@
 
     max-width: 300;
     margin: 50px;
-    padding: 25px;
+    padding: 10px;
 
     border-radius: 4px;
 
@@ -22,10 +22,13 @@
     font-size: 20px;
     text-transform: uppercase;
     margin-bottom: 20px;
+    margin-top: 15px;
 }
 
 .jobs-container {
     flex-grow: 1;
+    min-height: 100px;
+    padding: 15px;
 }
 
 .job-card {
@@ -81,4 +84,11 @@
 
 .jobs-container.cdk-drop-list-dragging .job-card:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.buttons,
+.column-name {
+    margin-right: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
 }

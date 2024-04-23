@@ -21,7 +21,6 @@ import { MatFormField } from '@angular/material/form-field';
 @NgModule({
   declarations: [
     AppComponent,
-    JobBoardComponent,
     DialogBoxComponent
   ],
   imports: [
@@ -36,7 +35,8 @@ import { MatFormField } from '@angular/material/form-field';
     MatIconModule,
     MatButtonModule,
     ScrapeFormComponent,
-    MatFormField
+    MatFormField,
+    JobBoardComponent
   ],
   providers: [
     provideAnimationsAsync()

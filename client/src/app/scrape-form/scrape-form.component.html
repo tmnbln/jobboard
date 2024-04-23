@@ -4,7 +4,7 @@
             <mat-form-field>
                 <mat-label>Enter URL to Scrape..</mat-label>
                 <input matInput type="url" id="url" formControlName="url" required pattern="https?://.+">
-                <mat-error *ngIf="form.get('url')?.invalid">Please enter a valid URL</mat-error>
+                <mat-error *ngIf="form.get('url')?.invalid">🦆 Please enter a valid URL</mat-error>
             </mat-form-field>
             <button id="scrape" mat-raised-button color="warn" type="submit" [disabled]="!form.valid">Scrape
                 <mat-icon>auto_awesome</mat-icon></button>

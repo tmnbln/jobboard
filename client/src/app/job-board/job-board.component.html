@@ -1,26 +1,30 @@
 <div class="job-board">
     <div class="board-columns" cdkDropListGroup>
         <div class="board-column" *ngFor="let column of board.columns">
-            <div class="column-title">
-                <h3>{{ column.name }}</h3>
-            </div>
-            <div class="jobs-container" cdkDropList [cdkDropListData]="column.jobOffer"
-                (cdkDropListDropped)="drop($event)">
-                <div class="job-card" *ngFor="let jobOffer of column.jobOffer" cdkDrag>
-                    {{ jobOffer.title }} <br />
-                    {{ jobOffer.company }}
-                    <div class="job-actions">
-                        <mat-dialog-actions>
-                        </mat-dialog-actions>
-                        <button id="delete" *ngIf="column.name === 'Done'"
-                            (click)="openDeleteDialog(jobOffer)">🗑️</button>
-                        <button id="view" (click)="openViewDialog(jobOffer)">View</button>
+            <mat-card>
+                <mat-card-title class="column-name">{{ column.name }}</mat-card-title>
+                <div class="jobs-container" cdkDropList [cdkDropListData]="column.jobOffer"
+                    (cdkDropListDropped)="drop($event)">
+                    <div class="job-card" *ngFor="let jobOffer of column.jobOffer" cdkDrag>
+                        <div>
+                            {{ jobOffer.title }} <br />
+                            {{ jobOffer.company }}
+                        </div>
+                        <div>
+                            <button class="buttons" mat-raised-button *ngIf="column.name === 'Done'"
+                                (click)="openDeleteDialog(jobOffer)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button class="buttons" mat-raised-button (click)="openViewDialog(jobOffer)">View</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button id="add" *ngIf="column.name === 'Applied'"
-            mat-raised-button color="warn"
-            (click)="openScrapeDialog()"><mat-icon>add_circle</mat-icon>Add new</button>
+                <mat-card-actions *ngIf="column.name === 'Applied'">
+                    <button mat-raised-button color="accent" (click)="openScrapeDialog()">
+                        <mat-icon>add_circle</mat-icon>Add new
+                    </button>
+                </mat-card-actions>
+            </mat-card>
         </div>
     </div>
 </div>
