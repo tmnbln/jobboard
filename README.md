@@ -1,5 +1,7 @@
 Job Board is a web application that allows users to manage and track job offers using a kanban board interface. It provides features such as web scraping job offer details, storing them in a database, and a Chrome extension for easy access and editing of job offers.
 
+![1713970462350](image/README/dashboard.png)
+
 ## Features
 
 * Kanban board interface for organizing job offers
