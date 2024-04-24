@@ -79,6 +79,7 @@ Job Board is a web application that allows users to manage and track job offers 
 * Drag and drop job offers between different stages to update their status.
 * Click on a job offer to view its details and add notes.
 * Use the Chrome extension to easily access and edit job offers while browsing job websites.
+* [Early demo](https://www.youtube.com/watch?v=IAfs1Hpea9M).
 
 ## Contributing
 
