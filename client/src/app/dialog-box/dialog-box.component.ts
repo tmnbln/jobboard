@@ -20,7 +20,7 @@ interface DialogData {
 })
 
 export class DialogBoxComponent {
-  constructor(
+  constructor (
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private dialogRef: MatDialogRef<DialogBoxComponent>
   ) {
@@ -28,11 +28,11 @@ export class DialogBoxComponent {
     this.data.confirmText = this.data.confirmText ?? 'OK';
   }
 
-  onConfirm(): void {
+  onConfirm (): void {
     this.dialogRef.close(true);
   }
 
-  onCancel(): void {
+  onCancel (): void {
     this.dialogRef.close(false);
   }
 }

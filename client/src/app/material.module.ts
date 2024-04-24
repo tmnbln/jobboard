@@ -9,17 +9,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-    exports: [
-        MatButtonModule,
-        MatDialog,
-        MatDialogModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        MatSnackBar,
-        MatSnackBarModule
-    ]
+  exports: [
+    MatButtonModule,
+    MatDialog,
+    MatDialogModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatSnackBar,
+    MatSnackBarModule
+  ]
 })
 export class MaterialModule { }

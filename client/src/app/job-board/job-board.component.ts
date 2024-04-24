@@ -32,13 +32,13 @@ export class JobBoardComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
+  constructor (
     private jobOfferService: JobOfferService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit (): void {
     this.fetchJobOffers();
 
     this.jobOfferService.getJobOfferAddedEvent().pipe(
@@ -46,7 +46,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     ).subscribe(() => this.fetchJobOffers());
   }
 
-  fetchJobOffers(): void {
+  fetchJobOffers (): void {
     this.jobOfferService.getJobOffers().subscribe(jobOffers => {
       this.board.columns.forEach(column => {
         column.jobOffer = jobOffers.filter(job => job.status === column.name);
@@ -54,7 +54,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  drop(event: CdkDragDrop<JobOffer[]>): void {
+  drop (event: CdkDragDrop<JobOffer[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -73,7 +73,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDeleteDialog(jobOffer: JobOffer): void {
+  openDeleteDialog (jobOffer: JobOffer): void {
     const dialogRef = this.dialog.open(DialogBoxComponent, {
       data: {
         title: 'Delete Offer?',
@@ -100,7 +100,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  openScrapeDialog(): void {
+  openScrapeDialog (): void {
     this.dialog.open(ScrapeFormComponent, {
       data: {
         fromScrape: true,
@@ -110,7 +110,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  openViewDialog(jobOffer: JobOffer): void {
+  openViewDialog (jobOffer: JobOffer): void {
     this.dialog.open(ScrapeFormComponent, {
       data: {
         jobOffer: jobOffer,
@@ -120,16 +120,16 @@ export class JobBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  private showSuccessMessage(message: string): void {
+  private showSuccessMessage (message: string): void {
     this.snackBar.open(`✨ ${message}`, 'Close', { duration: 3000 });
   }
 
-  private handleError(message: string, error: any): void {
+  private handleError (message: string, error: any): void {
     console.error(`🦆 ${message}:`, error);
     this.snackBar.open(`🦆 ${message}`, 'Close', { duration: 3000 });
   }

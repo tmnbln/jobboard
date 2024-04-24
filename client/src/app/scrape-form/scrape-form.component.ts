@@ -19,7 +19,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   private destroy$ = new Subject<void>();
 
-  constructor(
+  constructor (
     private fb: FormBuilder,
     private jobOfferService: JobOfferService,
     private snackBar: MatSnackBar,
@@ -37,13 +37,13 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  ngOnInit () {
     if (this.data.jobOffer) {
       this.form.patchValue(this.data.jobOffer);
     }
   }
 
-  read() {
+  read () {
     this.isLoading = true;
     const url = this.form.get('url')?.value;
     console.log('✨ Sending URL to server:', url);
@@ -62,7 +62,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  save() {
+  save () {
     const jobOffer: JobOffer = { ...this.form.value };
     this.jobOfferService.createJobOffer(jobOffer).pipe(
       takeUntil(this.destroy$)
@@ -75,7 +75,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  update() {
+  update () {
     const updatedOffer = { ...this.data.jobOffer, ...this.form.value };
     this.jobOfferService.updateJobOffer(updatedOffer).pipe(
       takeUntil(this.destroy$)
@@ -88,20 +88,20 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  close(): void {
+  close (): void {
     this.dialogRef.close();
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  private showSuccessMessage(message: string): void {
+  private showSuccessMessage (message: string): void {
     this.snackBar.open(`✨ ${message}`, 'Close', { duration: 3000 });
   }
 
-  private handleError(message: string, error: any): void {
+  private handleError (message: string, error: any): void {
     console.error(`🦆 ${message}:`, error);
     this.snackBar.open(`🦆 ${message}`, 'Close', { duration: 3000 });
   }
