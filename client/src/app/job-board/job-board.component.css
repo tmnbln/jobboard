@@ -93,7 +93,8 @@
     margin-top: 10px;
 }
 
-.mat-icon, .add-new-btn {
+.mat-icon,
+.add-new-btn {
     display: flex;
     justify-content: center !important;
     align-items: center !important;
@@ -104,5 +105,9 @@
 .job-card-btns {
     display: flex;
     justify-content: flex-end;
+}
 
+.appliedDate {
+    font-size: 12px;
+    text-align: left;
 }

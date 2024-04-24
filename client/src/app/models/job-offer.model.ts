@@ -8,5 +8,5 @@ export interface JobOffer {
   url: string;
   notes?: string;
   status: string;
-  dateApplied: Date;
+  createdAt: Date;
 }

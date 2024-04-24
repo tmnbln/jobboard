@@ -140,6 +140,23 @@ export class JobBoardComponent implements OnInit {
     });
   }
 
+  getTimeSinceApplied(createdAt: Date | undefined): string {
+    if (!createdAt) {
+      return '';
+    }
+    const createdAtDate = new Date(createdAt);
+    const now = new Date();
+    const diffMs = now.getTime() - createdAtDate.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (diffDays > 0) {
+      return `${diffDays} days ${diffHours} hours ago`;
+    } else {
+      return `${diffHours} hours ago`;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
