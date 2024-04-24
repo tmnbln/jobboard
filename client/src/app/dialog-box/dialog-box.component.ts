@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface DialogData {
   title: string;
@@ -13,7 +14,9 @@ interface DialogData {
 @Component({
   selector: 'app-dialog-box',
   templateUrl: './dialog-box.component.html',
-  styleUrls: ['./dialog-box.component.css']
+  styleUrls: ['./dialog-box.component.css'],
+  standalone: true,
+  imports: [MatSnackBar]
 })
 
 export class DialogBoxComponent {
