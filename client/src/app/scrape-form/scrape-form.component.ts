@@ -1,106 +1,77 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { JobOfferService } from '../job-offer.service';
 import { JobOffer } from '../models/job-offer.model';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MaterialModule } from '../material.module';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-scrape-form',
   templateUrl: './scrape-form.component.html',
   styleUrls: ['./scrape-form.component.css'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatProgressSpinnerModule, MatIconModule, ReactiveFormsModule, MatInputModule]
+  imports: [MaterialModule]
 })
-export class ScrapeFormComponent {
-  url: string = '';
-  jobOffer!: JobOffer;
-  urlControl = new FormControl('');
+export class ScrapeFormComponent implements OnInit, OnDestroy {
+  form: FormGroup;
   isLoading: boolean = false;
-  fromScrape: boolean = true;
-  destroy$ = new Subject();
-  form!: FormGroup;
+  private destroy$ = new Subject<void>();
 
   constructor(
+    private fb: FormBuilder,
     private jobOfferService: JobOfferService,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { jobOffer: JobOffer, fromScrape: boolean },
     private dialogRef: MatDialogRef<ScrapeFormComponent>
   ) {
-    this.fromScrape = data.fromScrape;
+    this.form = this.fb.group({
+      company: '',
+      title: '',
+      location: '',
+      description: '',
+      salary: '',
+      url: '',
+      notes: ''
+    });
   }
 
   ngOnInit() {
-    this.form = new FormGroup({
-      company: new FormControl(''),
-      title: new FormControl(''),
-      location: new FormControl(''),
-      description: new FormControl(''),
-      salary: new FormControl(''),
-      url: new FormControl(''),
-      notes: new FormControl('')
-    });
-
     if (this.data.jobOffer) {
-      this.form.patchValue({
-        company: this.data.jobOffer.company,
-        title: this.data.jobOffer.title,
-        location: this.data.jobOffer.location,
-        description: this.data.jobOffer.description,
-        salary: this.data.jobOffer.salary,
-        url: this.data.jobOffer.url,
-        notes: this.data.jobOffer.notes
-      });
+      this.form.patchValue(this.data.jobOffer);
     }
   }
 
   read() {
     this.isLoading = true;
-    this.url = this.form.get('url')?.value;
-    console.log('✨ Sending URL to server:', this.url);
-    this.jobOfferService.readJobOffer(this.url).subscribe((data: any) => {
-      this.isLoading = false;
-      this.form.patchValue({
-        company: data.company,
-        title: data.title,
-        location: data.location,
-        description: data.description,
-        salary: data.salary,
-        url: data.url,
-        notes: ''
-      });
-      takeUntil(this.destroy$);
-      console.log('✨ Received data:', data);
-    }, error => {
-      this.isLoading = false;
-      takeUntil(this.destroy$);
-      console.error('🦆 Failed to fetch data:', error);
+    const url = this.form.get('url')?.value;
+    console.log('✨ Sending URL to server:', url);
+    this.jobOfferService.readJobOffer(url).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data: JobOffer) => {
+        this.isLoading = false;
+        this.form.patchValue(data);
+        console.log('✨ Received data:', data);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.handleError('🦆 Failed to fetch data', error);
+      }
     });
   }
 
   save() {
-    this.jobOffer = {
-      ...this.jobOffer,
-      company: this.form.value.company,
-      title: this.form.value.title,
-      location: this.form.value.location,
-      description: this.form.value.description,
-      salary: this.form.value.salary,
-      url: this.form.value.url,
-      notes: this.form.value.notes
-    };
-
-    this.jobOfferService.createJobOffer(this.jobOffer).subscribe(() => {
-      this.snackBar.open('✨ Job offer saved successfully.', 'Close', { duration: 3000 });
-      this.dialogRef.close(true);
-      takeUntil(this.destroy$);
+    const jobOffer: JobOffer = { ...this.form.value };
+    this.jobOfferService.createJobOffer(jobOffer).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: () => {
+        this.showSuccessMessage('✨ Job offer saved successfully.');
+        this.dialogRef.close(true);
+      },
+      error: (error) => this.handleError('🦆 Failed to save job offer', error)
     });
   }
 
@@ -110,13 +81,10 @@ export class ScrapeFormComponent {
       takeUntil(this.destroy$)
     ).subscribe({
       next: () => {
-        this.snackBar.open('✨ Job offer updated successfully.', 'Close', { duration: 3000 });
+        this.showSuccessMessage('✨ Job offer updated successfully.');
         this.dialogRef.close(true);
       },
-      error: (err) => {
-        console.error('Failed to update job offer', err);
-        this.snackBar.open('🦆 Error updating job offer.', 'Close', { duration: 3000 });
-      }
+      error: (error) => this.handleError('🦆 Failed to update job offer', error)
     });
   }
 
@@ -125,7 +93,16 @@ export class ScrapeFormComponent {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(true);
+    this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private showSuccessMessage(message: string): void {
+    this.snackBar.open(`✨ ${message}`, 'Close', { duration: 3000 });
+  }
+
+  private handleError(message: string, error: any): void {
+    console.error(`🦆 ${message}:`, error);
+    this.snackBar.open(`🦆 ${message}`, 'Close', { duration: 3000 });
   }
 }
