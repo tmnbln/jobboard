@@ -2,7 +2,6 @@ import { JobOffer } from './../models/job-offer.model';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { Board } from '../models/board.model';
-import { Column } from '../models/column.model';
 import { JobOfferService } from '../job-offer.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,11 +34,23 @@ export class JobBoardComponent implements OnInit {
     private matDialog: MatDialog,
     private snackBar: MatSnackBar) { }
 
-  board: Board = new Board('JobBoard', [
-    new Column('Applied', []),
-    new Column('In Progress', []),
-    new Column('Done', [])
-  ]);
+  board: Board = {
+    name: 'JobBoard',
+    columns: [
+      {
+        name: 'Applied',
+        jobOffer: []
+      },
+      {
+        name: 'In Progress',
+        jobOffer: []
+      },
+      {
+        name: 'Done',
+        jobOffer: []
+      }
+    ]
+  };
 
   ngOnInit(): void {
     this.fetchJobOffers();
