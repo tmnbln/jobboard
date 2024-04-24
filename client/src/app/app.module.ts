@@ -14,15 +14,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    DialogBoxComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,

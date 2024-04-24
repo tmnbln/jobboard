@@ -67,7 +67,7 @@ export class JobBoardComponent implements OnInit, OnDestroy {
         this.jobOfferService.updateJobOffer(jobOffer).pipe(
           takeUntil(this.destroy$)
         ).subscribe({
-          error: (error) => this.handleError('🦆 Failed to update job offer status.', error)
+          error: (error) => this.handleError('🦆 Failed to update job offer status', error)
         });
       }
     }
@@ -84,19 +84,19 @@ export class JobBoardComponent implements OnInit, OnDestroy {
       }
     });
 
-    dialogRef.componentInstance.confirmed.pipe(
+    dialogRef.afterClosed().pipe(
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.jobOfferService.deleteJobOffer(jobOffer._id).subscribe({
-        next: () => {
-          this.showSuccessMessage('✨ Job offer deleted successfully.');
-          dialogRef.close();
-        },
-        error: (error) => {
-          this.handleError('🦆 Failed to delete job offer.', error);
-          dialogRef.close();
-        }
-      });
+    ).subscribe(result => {
+      if (result) {
+        this.jobOfferService.deleteJobOffer(jobOffer._id).subscribe({
+          next: () => {
+            this.showSuccessMessage('✨ Job offer deleted successfully.');
+          },
+          error: (error) => {
+            this.handleError('🦆 Failed to delete job offer.', error);
+          }
+        });
+      }
     });
   }
 
