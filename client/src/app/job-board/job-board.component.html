@@ -12,7 +12,7 @@
                         </div>
                         <div class="job-card-btns">
                             <div class="appliedDate">
-                                <p>{{ getTimeSinceApplied(jobOffer.createdAt) }}</p>
+                                <p>{{ getTimeSinceApplied(jobOffer.createdAt | timeAgo) }}</p>
                             </div>
                             <button class="buttons" mat-raised-button *ngIf="column.name === 'Done'"
                                 (click)="openDeleteDialog(jobOffer)">

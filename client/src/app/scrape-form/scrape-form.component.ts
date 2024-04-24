@@ -57,7 +57,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isLoading = false;
-        this.handleError('🦆 Failed to fetch data', error);
+        this.handleError('🦆 Failed to fetch data.', error);
       }
     });
   }
@@ -71,7 +71,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
         this.showSuccessMessage('✨ Job offer saved successfully.');
         this.dialogRef.close(true);
       },
-      error: (error) => this.handleError('🦆 Failed to save job offer', error)
+      error: (error) => this.handleError('🦆 Failed to save job offer.', error)
     });
   }
 
@@ -84,7 +84,7 @@ export class ScrapeFormComponent implements OnInit, OnDestroy {
         this.showSuccessMessage('✨ Job offer updated successfully.');
         this.dialogRef.close(true);
       },
-      error: (error) => this.handleError('🦆 Failed to update job offer', error)
+      error: (error) => this.handleError('🦆 Failed to update job offer.', error)
     });
   }
 

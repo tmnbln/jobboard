@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatButtonModule,
     MatFormField,
     MatSnackBar,
+    MatSnackBarModule,
     JobBoardComponent,
     ScrapeFormComponent
   ],

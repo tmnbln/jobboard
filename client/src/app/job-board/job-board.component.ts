@@ -1,64 +1,49 @@
-import { JobOffer } from './../models/job-offer.model';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { JobOffer } from '../models/job-offer.model';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Board } from '../models/board.model';
 import { JobOfferService } from '../job-offer.service';
 import { Subject, takeUntil } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { ScrapeFormComponent } from '../scrape-form/scrape-form.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material/dialog';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MaterialModule } from '../material.module';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TimeAgoPipe } from '../pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-job-board',
   templateUrl: './job-board.component.html',
-  styleUrl: './job-board.component.css',
+  styleUrls: ['./job-board.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, CommonModule, MatDialogModule, DragDropModule]
+  imports: [CommonModule, DragDropModule, MaterialModule, TimeAgoPipe]
 })
-
-export class JobBoardComponent implements OnInit {
-  jobOffer!: JobOffer;
-  destroy$ = new Subject();
-
-  constructor(
-    private jobOfferService: JobOfferService,
-    private matDialog: MatDialog,
-    private snackBar: MatSnackBar) { }
-
+export class JobBoardComponent implements OnInit, OnDestroy {
   board: Board = {
     name: 'JobBoard',
     columns: [
-      {
-        name: 'Applied',
-        jobOffer: []
-      },
-      {
-        name: 'In Progress',
-        jobOffer: []
-      },
-      {
-        name: 'Done',
-        jobOffer: []
-      }
+      { name: 'Applied', jobOffer: [] },
+      { name: 'In Progress', jobOffer: [] },
+      { name: 'Done', jobOffer: [] }
     ]
   };
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private jobOfferService: JobOfferService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     this.fetchJobOffers();
 
-    this.jobOfferService.getJobOfferAddedEvent()
-      .pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.fetchJobOffers();
-      });
+    this.jobOfferService.getJobOfferAddedEvent().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.fetchJobOffers());
   }
 
   fetchJobOffers(): void {
@@ -69,28 +54,27 @@ export class JobBoardComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<JobOffer[]>) {
+  drop(event: CdkDragDrop<JobOffer[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       const jobOffer = event.container.data[event.currentIndex];
       const newStatus = this.board.columns.find(column => column.jobOffer === event.container.data)?.name;
 
       if (jobOffer && newStatus) {
         jobOffer.status = newStatus;
-        this.jobOfferService.updateJobOffer(jobOffer).subscribe({});
+        this.jobOfferService.updateJobOffer(jobOffer).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          error: (error) => this.handleError('🦆 Failed to update job offer status.', error)
+        });
       }
     }
   }
 
   openDeleteDialog(jobOffer: JobOffer): void {
-    const dialogRef = this.matDialog.open(DialogBoxComponent, {
+    const dialogRef = this.dialog.open(DialogBoxComponent, {
       data: {
         title: 'Delete Offer?',
         message: 'Are you sure you want to delete this offer:',
@@ -100,38 +84,34 @@ export class JobBoardComponent implements OnInit {
       }
     });
 
-    dialogRef.componentInstance.confirmed.subscribe(() => {
+    dialogRef.componentInstance.confirmed.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
       this.jobOfferService.deleteJobOffer(jobOffer._id).subscribe({
         next: () => {
-          console.log('✨ Job offer deleted successfully.');
+          this.showSuccessMessage('✨ Job offer deleted successfully.');
           dialogRef.close();
         },
-        error: (err) => {
-          console.error('🦆 Failed to delete job offer.', err);
+        error: (error) => {
+          this.handleError('🦆 Failed to delete job offer.', error);
           dialogRef.close();
         }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        this.snackBar.open('✨ Offer deleted successfully', 'Close', {
-          duration: 3000
-        });
       });
     });
   }
 
   openScrapeDialog(): void {
-    this.matDialog.open(ScrapeFormComponent, {
+    this.dialog.open(ScrapeFormComponent, {
       data: {
         fromScrape: true,
         title: 'Scrape Offers',
         message: 'Enter URL to Scrape offer.'
-      },
+      }
     });
   }
 
   openViewDialog(jobOffer: JobOffer): void {
-    this.matDialog.open(ScrapeFormComponent, {
+    this.dialog.open(ScrapeFormComponent, {
       data: {
         jobOffer: jobOffer,
         fromScrape: false,
@@ -140,26 +120,17 @@ export class JobBoardComponent implements OnInit {
     });
   }
 
-  getTimeSinceApplied(createdAt: Date | undefined): string {
-    if (!createdAt) {
-      return '';
-    }
-    const createdAtDate = new Date(createdAt);
-    const now = new Date();
-    const diffMs = now.getTime() - createdAtDate.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    if (diffDays > 0) {
-      return `${diffDays} days ${diffHours} hours ago`;
-    } else {
-      return `${diffHours} hours ago`;
-    }
-  }
-
   ngOnDestroy(): void {
-    this.destroy$.next(true);
+    this.destroy$.next();
     this.destroy$.complete();
   }
 
+  private showSuccessMessage(message: string): void {
+    this.snackBar.open(`✨ ${message}`, 'Close', { duration: 3000 });
+  }
+
+  private handleError(message: string, error: any): void {
+    console.error(`🦆 ${message}:`, error);
+    this.snackBar.open(`🦆 ${message}`, 'Close', { duration: 3000 });
+  }
 }
